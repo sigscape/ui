@@ -51,3 +51,10 @@ export { Tags } from "./components/Tag";
 
 export { ThemeProvider } from "./theme/ThemeProvider";
 export { ThemeToggle } from "./theme/ThemeToggle";
+
+export { TopBar, type NavItem, type NavChild } from "./layout/TopBar";
+export {
+  BottomBar,
+  type FooterLink,
+  type FooterSection,
+} from "./layout/BottomBar";
