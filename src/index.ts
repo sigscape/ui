@@ -54,6 +54,10 @@ export { ThemeToggle } from "./theme/ThemeToggle";
 
 export { TopBar, type NavItem, type NavChild } from "./layout/TopBar";
 export {
+  SigscapeWordmark,
+  SigscapeMark,
+} from "./layout/SigscapeWordmark";
+export {
   BottomBar,
   type FooterLink,
   type FooterSection,

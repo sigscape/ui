@@ -16,6 +16,7 @@ those rules are *implemented*; change a rule there, change the primitive here.
 | Tokens | `tokens.css` — `@custom-variant dark`, `:root` / `.dark` palettes, `@theme inline` bridge, base layer, `.scrollbar-none`, `.sig-loader` keyframes |
 | Primitives | `Button`, `Card`, `Tooltip`, `HelpTip`, `LabelTip`, `Modal`, `Segmented`, `Diagnostics`, `SigLoader`, `Tags`, `cn` |
 | Theme | `ThemeProvider`, `ThemeToggle` (next-themes) |
+| Brand | `SigscapeWordmark`, `SigscapeMark` — the umbrella identity. Consuming apps must ship `/assets/sigscape-logo.svg`, `/assets/sigscape-logo-reversed.svg` and `/assets/sigscape-mark.svg` |
 | Shell | `TopBar`, `BottomBar` — fully prop-driven; the app passes the wordmark and nav it has already translated and role-filtered |
 | Contracts | `Diagnostic`, `DiagnosticLevel`, `worstLevel` — the plain-data diagnostics model the renderer draws |
 | Lint | `@sigscape/ui/eslint` — the banned-grey-token rule, so the style guide is checked instead of remembered |
@@ -28,7 +29,7 @@ every domain component (the sigscape studio, the MuTopia atlas).
 ```jsonc
 // package.json
 "dependencies": {
-  "@sigscape/ui": "git+https://github.com/sigscape/ui.git#v0.3.1"
+  "@sigscape/ui": "git+https://github.com/sigscape/ui.git#v0.4.0"
 }
 ```
 
