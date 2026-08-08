@@ -1,0 +1,209 @@
+/**
+ * @sigscape/ui — design tokens and base layer, shared by sigscape.org and
+ * mutopia.sigscape.org so the two read as one product.
+ *
+ * Import AFTER `@import "tailwindcss"` in the consuming app:
+ *
+ *   @import "tailwindcss";
+ *   @import "@sigscape/ui/tokens.css";
+ *
+ * The `@source` below is load-bearing. Tailwind v4 does not scan node_modules,
+ * so without it every class name used inside this package is dropped from the
+ * generated CSS and the primitives ship unstyled. It is declared here, relative
+ * to this file, so consuming apps do not have to know the path.
+ */
+
+@source ".";
+
+/* Drive Tailwind's `dark:` variant from the next-themes `.dark` class on <html>,
+   not the OS `prefers-color-scheme` media query. Without this, `dark:` utilities
+   (e.g. the logo's `dark:hidden`/`dark:block`) follow the OS, mismatching the
+   actual site theme. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Light mode */
+:root {
+  --background: oklch(99.8% 0 0);
+  --foreground: oklch(14% 0.02 260);
+
+  --card: oklch(99.8% 0 0);
+  --card-foreground: oklch(14% 0.02 260);
+
+  --popover: oklch(99.8% 0 0);
+  --popover-foreground: oklch(14% 0.02 260);
+
+  --primary: #1a73e8; /* Google blue 600 */
+  --primary-foreground: oklch(98% 0.01 0);
+
+  --secondary: oklch(78% 0.03 50);
+  --secondary-foreground: oklch(20% 0.02 260);
+
+  --muted: oklch(96% 0.01 80);
+  --muted-foreground: oklch(50% 0.02 260);
+
+  --accent: oklch(50% 0.12 140);
+  --accent-foreground: oklch(98% 0.01 0);
+
+  --destructive: oklch(58% 0.2 25);
+  --destructive-foreground: oklch(98% 0.01 0);
+
+  --border: oklch(92% 0.01 240);
+  --input: oklch(92% 0.01 240);
+  --ring: #1a73e8;
+
+  --radius: 0.625rem;
+
+  --chart-1: oklch(65% 0.2 220);
+  --chart-2: oklch(70% 0.18 160);
+  --chart-3: oklch(60% 0.15 280);
+  --chart-4: oklch(75% 0.18 80);
+  --chart-5: oklch(68% 0.19 40);
+
+  /* SigScape brand accents (MuTopia navy / cyan) */
+  --brand-navy: #262262;
+  --brand-cyan: #72d0f6;
+}
+
+/* Dark mode */
+.dark {
+  --background: oklch(12% 0.02 260);
+  --foreground: oklch(98% 0.01 0);
+
+  --card: oklch(18% 0.02 260);
+  --card-foreground: oklch(98% 0.01 0);
+
+  --popover: oklch(18% 0.02 260);
+  --popover-foreground: oklch(98% 0.01 0);
+
+  --primary: #8ab4f8; /* Google blue (dark-mode tint) */
+  --primary-foreground: oklch(12% 0.02 260);
+
+  --secondary: oklch(25% 0.02 260);
+  --secondary-foreground: oklch(98% 0.01 0);
+
+  --muted: oklch(20% 0.01 260);
+  --muted-foreground: oklch(70% 0.02 260);
+
+  --accent: oklch(60% 0.13 140);
+  --accent-foreground: oklch(12% 0.02 260);
+
+  --destructive: oklch(65% 0.19 25);
+  --destructive-foreground: oklch(12% 0.02 260);
+
+  --border: oklch(25% 0.02 260);
+  --input: oklch(25% 0.02 260);
+  --ring: #8ab4f8;
+
+  --chart-1: oklch(75% 0.18 220);
+  --chart-2: oklch(78% 0.16 160);
+  --chart-3: oklch(72% 0.14 280);
+  --chart-4: oklch(82% 0.17 80);
+  --chart-5: oklch(75% 0.18 40);
+
+  --brand-navy: #262262;
+  --brand-cyan: #72d0f6;
+}
+
+@theme inline {
+  --font-family-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-family-mono: var(--font-mono), ui-monospace, monospace;
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-brand-navy: var(--brand-navy);
+  --color-brand-cyan: var(--brand-cyan);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Hide scrollbar on horizontal chip bars */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ── Sigscape signature loader — the single canonical loading animation ── */
+.sig-loader {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 84px;
+}
+.sig-loader .bar {
+  width: 9px;
+  border-radius: 5px;
+  height: var(--max, 100%);
+  /* Animate transform (compositor thread), not height (main-thread layout), so the
+     loader keeps running even while a heavy, blocking React mount janks the main
+     thread. transform-origin:bottom keeps bars anchored to the baseline as they scale. */
+  transform-origin: bottom;
+  will-change: transform;
+  animation: sig-bar var(--dur, 1.1s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+@keyframes sig-bar {
+  0%,
+  100% {
+    transform: scaleY(var(--rmin, 0.16));
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+.sig-loader .bar.settled {
+  animation: none;
+  height: var(--rest, 40%);
+  transition: height 0.55s cubic-bezier(0.2, 0.75, 0.25, 1);
+}
+.sig-loader.sm {
+  height: 20px;
+  gap: 2.5px;
+}
+.sig-loader.sm .bar {
+  width: 3px;
+  border-radius: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sig-loader .bar {
+    animation: none;
+    height: var(--rest, 40%);
+  }
+}
+
