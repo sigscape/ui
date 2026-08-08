@@ -16,7 +16,9 @@ those rules are *implemented*; change a rule there, change the primitive here.
 | Tokens | `tokens.css` — `@custom-variant dark`, `:root` / `.dark` palettes, `@theme inline` bridge, base layer, `.scrollbar-none`, `.sig-loader` keyframes |
 | Primitives | `Button`, `Card`, `Tooltip`, `HelpTip`, `LabelTip`, `Modal`, `Segmented`, `Diagnostics`, `SigLoader`, `Tags`, `cn` |
 | Theme | `ThemeProvider`, `ThemeToggle` (next-themes) |
+| Shell | `TopBar`, `BottomBar` — fully prop-driven; the app passes the wordmark and nav it has already translated and role-filtered |
 | Contracts | `Diagnostic`, `DiagnosticLevel`, `worstLevel` — the plain-data diagnostics model the renderer draws |
+| Lint | `@sigscape/ui/eslint` — the banned-grey-token rule, so the style guide is checked instead of remembered |
 
 App-owned, deliberately **not** here: nav/site config, logos, auth, i18n, and
 every domain component (the sigscape studio, the MuTopia atlas).
@@ -39,6 +41,12 @@ const nextConfig: NextConfig = { transpilePackages: ["@sigscape/ui"] };
 /* app/globals.css — tokens must come after Tailwind */
 @import "tailwindcss";
 @import "@sigscape/ui/tokens.css";
+```
+
+```js
+// eslint.config.mjs
+import { designSystem } from "@sigscape/ui/eslint";
+export default defineConfig([...nextVitals, ...nextTs, ...designSystem]);
 ```
 
 `tokens.css` carries its own `@source "."`, so consumers do not have to know the
