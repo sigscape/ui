@@ -28,7 +28,7 @@ every domain component (the sigscape studio, the MuTopia atlas).
 ```jsonc
 // package.json
 "dependencies": {
-  "@sigscape/ui": "github:sigscape/ui#v0.3.0"
+  "@sigscape/ui": "git+https://github.com/sigscape/ui.git#v0.3.1"
 }
 ```
 
@@ -68,6 +68,17 @@ are deliberate:
 - `@radix-ui/react-slot` is `^1.2.3`, wide enough to span both apps —
   mutopia-client gets 1.2.3 transitively from the `radix-ui` meta-package, while
   sigscape-client resolves 1.3.x. The `asChild` API is identical across both.
+
+## Licence
+
+MIT, © President and Fellows of Harvard College. Note this is the only sigscape
+repo under a permissive licence — it holds design tokens and generic UI
+primitives, nothing scientific. The packages themselves (MuTopia, SigMA,
+SigMA2) keep their own terms.
+
+`"private": true` stays set: it blocks an accidental `npm publish` while the
+package is consumed as a git dependency. Drop it if you ever publish to a
+registry.
 
 ## Releasing
 
