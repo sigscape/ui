@@ -53,8 +53,13 @@ intact. Bundling client components ahead of time is the usual way a shared
 component package breaks under the App Router, and skipping the build step also
 means a git dependency installs with no `prepare` hook.
 
-Every runtime dependency is a **peer**, so the apps control versions. Note that
-`lucide-react` is pinned to `^1` — a consumer still on `0.x` must bump first.
+Every runtime dependency is a **peer**, so the apps control versions. Two ranges
+are deliberate:
+
+- `lucide-react` is `^1`. A consumer still on `0.x` must bump first.
+- `@radix-ui/react-slot` is `^1.2.3`, wide enough to span both apps —
+  mutopia-client gets 1.2.3 transitively from the `radix-ui` meta-package, while
+  sigscape-client resolves 1.3.x. The `asChild` API is identical across both.
 
 ## Releasing
 
