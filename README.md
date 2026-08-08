@@ -29,7 +29,7 @@ every domain component (the sigscape studio, the MuTopia atlas).
 ```jsonc
 // package.json
 "dependencies": {
-  "@sigscape/ui": "git+https://github.com/sigscape/ui.git#v0.4.0"
+  "@sigscape/ui": "git+https://github.com/sigscape/ui.git#v0.5.0"
 }
 ```
 

@@ -1,7 +1,4 @@
-"use client";
-
 import * as React from "react";
-import { useTheme } from "next-themes";
 
 const LOGO_RATIO = 540 / 140;
 
@@ -9,9 +6,12 @@ const LOGO_RATIO = 540 / 140;
  * The sigscape wordmark — the umbrella brand, used by sigscape.org for its own
  * identity and by mutopia.sigscape.org to show it is part of the same family.
  *
- * Switched off the actual next-themes theme rather than the OS: the dark-text
- * mark in light mode, the light-text one in dark mode. Before mount it renders
- * the light-mode mark (the default theme) and corrects on the client.
+ * Switched by CSS, not JavaScript: both marks are emitted and the `dark:`
+ * variant picks one. That works because `tokens.css` defines `@custom-variant
+ * dark` against the next-themes `.dark` class, so `dark:` follows the site
+ * theme rather than the OS setting. Reading the theme in JS instead would mean
+ * a client component, no wordmark in the server-rendered HTML, and a flash of
+ * the wrong mark on first paint.
  *
  * **Consuming apps must ship both files** at these public-root paths:
  * `/assets/sigscape-logo.svg` and `/assets/sigscape-logo-reversed.svg`.
@@ -24,22 +24,23 @@ export function SigscapeWordmark({
   /** Height in px; width scales automatically. */
   height?: number;
 }) {
-  const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = React.useState(false);
-  React.useEffect(() => setMounted(true), []);
-
-  const isDark = mounted && resolvedTheme === "dark";
-  const src = isDark
-    ? "/assets/sigscape-logo-reversed.svg"
-    : "/assets/sigscape-logo.svg";
-
+  const size = { height, width: height * LOGO_RATIO };
   return (
     <span className={`inline-flex items-center ${className}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={src}
+        src="/assets/sigscape-logo.svg"
         alt="sigscape"
-        style={{ height, width: height * LOGO_RATIO }}
+        style={size}
+        className="block dark:hidden"
+      />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/assets/sigscape-logo-reversed.svg"
+        alt=""
+        aria-hidden
+        style={size}
+        className="hidden dark:block"
       />
     </span>
   );
@@ -47,8 +48,8 @@ export function SigscapeWordmark({
 
 /**
  * The standalone sigscape mark (spectrum bars) — legible on light and dark
- * surfaces alike. Use for compact brand spots such as the studio toolbar.
- * Expects `/assets/sigscape-mark.svg`.
+ * surfaces alike, so it needs no theme switch. Use for compact brand spots such
+ * as the studio toolbar. Expects `/assets/sigscape-mark.svg`.
  */
 export function SigscapeMark({
   className = "",
