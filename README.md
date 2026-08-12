@@ -24,6 +24,34 @@ those rules are *implemented*; change a rule there, change the primitive here.
 App-owned, deliberately **not** here: nav/site config, logos, auth, i18n, and
 every domain component (the sigscape studio, the MuTopia atlas).
 
+### Charts
+
+There are none in this package today, and `SigLoader` is not one — its bars are
+a fixed silhouette that encodes nothing. Every real plot lives in the consuming
+app (`components/spectrum`, `components/exposure`, `components/atlas`).
+
+If a chart primitive ever does move in here, it follows the same rules those
+plots already do, so the two sites cannot diverge on how data is drawn:
+
+- **Nothing over the data.** No gridlines by default, no background fill behind
+  the plot area, no annotations, reference lines or shaded spans unless the user
+  asked for them. A grid stays available as an opt-in prop; it is off by default.
+- **No redundant encoding.** If a boundary is already carried by color or by a
+  label, it does not also get a rule drawn through the data.
+- **Tick labels stay at or under six characters** (`1.2M`, not `1,234,567`); the
+  exact figure belongs in a hover read-out.
+- **One type scale per chart**, declared once, never `fontSize` at the call site.
+- **Legends sit outside the plot area**, below it by preference.
+- **No title on a standalone panel** — the surrounding section already has one.
+  Small multiples are the exception and need per-panel titles.
+- **Alpha only where marks overlap.** Bars that do not overlap are drawn at full
+  opacity; hover dims the others rather than brightening one.
+- Refused outright: pie and donut charts, stacked area, 3D anything, dual axes
+  that re-encode one variable, drop shadows or gradients over the data.
+
+Color is the exception: the substitution-class and signature palettes are domain
+conventions owned by the app, not this package.
+
 ## Consuming it
 
 ```jsonc

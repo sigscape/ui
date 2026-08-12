@@ -49,14 +49,17 @@ export function Tags({
             key={t}
             title={lang ? lang.name : undefined}
             className={cn(
-              "inline-flex items-center rounded bg-muted-foreground/12 text-foreground/70",
+              // Full-strength text: a tag's label is content, and the tinted pill
+              // behind it already sets it apart. Fading it was hierarchy by
+              // opacity, which reads as disabled and costs contrast.
+              "inline-flex items-center rounded bg-muted-foreground/12 text-foreground",
               lang
                 ? sm
                   ? "px-2 py-1"
                   : "px-1.5 py-1"
                 : sm
                   ? "px-2 py-0.5 font-mono text-xs font-medium"
-                  : "px-1.5 py-0.5 font-mono text-[10px] font-medium",
+                  : "px-1.5 py-0.5 font-mono text-micro font-medium",
             )}
           >
             {lang ? (

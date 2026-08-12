@@ -18,7 +18,9 @@ import { Tooltip } from "./Tooltip";
  */
 export function LabelTip({ children, help, size = "sm", className }: { children: React.ReactNode; help: React.ReactNode; size?: "xs" | "sm"; className?: string }) {
   return (
-    <Tooltip content={help} className={cn("font-semibold uppercase tracking-wide text-foreground/60", size === "xs" ? "text-[10px]" : "text-[11px]", className)}>
+    // `micro-label` carries the weight, casing, tracking and /60 in one place;
+    // only the size varies, and it comes from the shared scale.
+    <Tooltip content={help} className={cn("micro-label", size === "xs" ? "text-micro" : "text-micro-plus", className)}>
       <span tabIndex={0} className="cursor-help transition-colors hover:text-foreground/80 focus-visible:text-foreground/80 focus-visible:outline-none">
         {children}
       </span>

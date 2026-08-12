@@ -150,6 +150,32 @@
   }
 }
 
+/* ── Micro type: the one scale below body size ──────────────────────────────
+   A font size set at a call site is how a system drifts into six label sizes —
+   `text-[10px]` and `text-[11px]` were already scattered across Diagnostics,
+   LabelTip and Tag, and across both consuming apps. Declared once here.
+
+   `.micro-label` is the tiny uppercase label that sits above a field or box.
+   Its /60 opacity is deliberate and is the one place fading is right: it is a
+   label, not content. Content text stays full strength — build hierarchy with
+   weight and size instead. */
+.text-micro {
+  font-size: 10px;
+  line-height: 1.35;
+}
+.text-micro-plus {
+  font-size: 11px;
+  line-height: 1.4;
+}
+.micro-label {
+  font-size: 11px;
+  line-height: 1.4;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  color: color-mix(in oklab, var(--foreground) 60%, transparent);
+}
+
 /* Hide scrollbar on horizontal chip bars */
 .scrollbar-none::-webkit-scrollbar {
   display: none;

@@ -46,15 +46,15 @@ function DiagnosticItem({ d }: { d: Diagnostic }) {
         <p className="mt-0.5">{d.detail}</p>
         {d.lists?.map((list) => (
           <div key={list.label} className="mt-1.5">
-            <span className="text-[10px] font-semibold uppercase tracking-wide text-foreground/60">{list.label}</span>
+            <span className="micro-label">{list.label}</span>
             <div className="mt-1 flex flex-wrap gap-1">
               {list.items.slice(0, CHIP_LIMIT).map((it) => (
-                <span key={it} className="rounded bg-muted-foreground/12 px-1.5 py-0.5 font-mono text-[10px] text-foreground">
+                <span key={it} className="rounded bg-muted-foreground/12 px-1.5 py-0.5 font-mono text-micro text-foreground">
                   {it}
                 </span>
               ))}
               {list.items.length > CHIP_LIMIT && (
-                <span className="px-1 py-0.5 text-[10px] text-foreground/60">+{list.items.length - CHIP_LIMIT} more</span>
+                <span className="px-1 py-0.5 text-micro text-foreground/60">+{list.items.length - CHIP_LIMIT} more</span>
               )}
             </div>
           </div>

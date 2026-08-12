@@ -7,7 +7,11 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card"
       className={cn(
-        "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
+        // One separation per surface: the fill and the border already lift the
+        // card off the page. The shadow was a third statement of the same fact,
+        // and elevation should mean "this floats" — which a static card doesn't.
+        // Popovers and tooltips keep their shadow, because they genuinely do.
+        "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6",
         className
       )}
       {...props}
