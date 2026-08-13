@@ -209,8 +209,23 @@ export function TopBar({
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:h-16 sm:px-6">
-        <Link href={homeHref} className="flex items-center text-foreground">
+      {/* Three columns, not `justify-between`: the side columns are equal, so
+          the nav sits in the middle one and is centered on the bar itself, not
+          on whatever the wordmark and the actions happen to leave over. With
+          `justify-between` the nav's position was a function of the actions'
+          width, so anything that changed size there — a studio pill that grows
+          on its own page, a user menu that appears once you sign in — slid the
+          whole nav sideways.
+
+          `minmax(0,1fr)` and not a bare `1fr`: `1fr` keeps an automatic minimum
+          of its own content, so a side wider than the room left over still
+          grows past its share and pushes the nav off center — measured at
+          19.5px on sigscape.org's studio page at 1024px, which is exactly the
+          bug this is meant to end. Letting the columns go below their content
+          width is what makes them equal at every viewport. Consumers keep the
+          side content narrow enough that the overflow is never reached. */}
+      <div className="mx-auto grid h-14 max-w-6xl grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center px-4 sm:h-16 sm:px-6">
+        <Link href={homeHref} className="flex items-center justify-self-start text-foreground">
           {logo}
         </Link>
 
@@ -236,7 +251,7 @@ export function TopBar({
           )}
         </nav>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 justify-self-end">
           <ThemeToggle />
           {actions}
           {nav.length > 0 && (
