@@ -69,6 +69,17 @@ export function BottomBar({
                         className="-mx-2 inline-block rounded-md px-2 py-1 text-sm font-medium text-foreground transition-colors hover:bg-muted-foreground/12"
                       >
                         {link.label}
+                        {/* A link that leaves the site says so, derived from
+                            the flag that already decides target="_blank" — so
+                            the mark cannot disagree with where the link goes.
+                            Both consumers used to write this by hand, one into
+                            its i18n strings and one in its wrapper, which is
+                            two implementations of one rule waiting to drift.
+                            Non-breaking space so the arrow never wraps alone;
+                            aria-hidden because "right arrow" read out after
+                            every external link is noise, and the new tab is
+                            already announced. */}
+                        {link.external && <span aria-hidden>{"\u00a0→"}</span>}
                       </Link>
                     </li>
                   ))}
