@@ -21,18 +21,27 @@
    actual site theme. */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Light mode */
+/* ── Light mode ──────────────────────────────────────────────────────────────
+   The page is an off-white, not paper white. A full-luminance field is the
+   single biggest glare source in a light UI, and this palette is meant to be
+   usable by people who get migraines. Cards stay pure white, so dropping the
+   page a little buys surface separation at the same time — the two used to be
+   the same value and only a 1.26:1 border told them apart. */
 :root {
-  --background: oklch(99.8% 0 0);
+  --background: oklch(96.4% 0.002 250);
   --foreground: oklch(14% 0.02 260);
 
-  --card: oklch(99.8% 0 0);
+  --card: oklch(100% 0 0);
   --card-foreground: oklch(14% 0.02 260);
 
-  --popover: oklch(99.8% 0 0);
+  --popover: oklch(100% 0 0);
   --popover-foreground: oklch(14% 0.02 260);
 
-  --primary: #1a73e8; /* Google blue 600 */
+  /* Google blue 700, not 600. 600 (#1a73e8) measures 4.47:1 on this
+     background — it misses WCAG AA for text by a hair, and it is the color of
+     every intentional link and text button in the product. 700 is the same
+     family at 5.32:1. */
+  --primary: #1967d2;
   --primary-foreground: oklch(98% 0.01 0);
 
   --secondary: oklch(78% 0.03 50);
@@ -47,9 +56,14 @@
   --destructive: oklch(58% 0.2 25);
   --destructive-foreground: oklch(98% 0.01 0);
 
-  --border: oklch(92% 0.01 240);
-  --input: oklch(92% 0.01 240);
-  --ring: #1a73e8;
+  /* `--border` draws decorative separators and card edges, so it stays quiet.
+     `--input` outlines an actual control, which WCAG 1.4.11 wants at 3:1
+     against its surroundings — they used to be the same token, and both sat at
+     1.26:1. Splitting them lets the control be findable without turning every
+     card into a boxed-in outline. */
+  --border: oklch(90% 0.01 240);
+  --input: oklch(64% 0.015 250);
+  --ring: #1967d2;
 
   --radius: 0.625rem;
 
@@ -64,35 +78,52 @@
   --brand-cyan: #72d0f6;
 }
 
-/* Dark mode */
+/* ── Dark mode ───────────────────────────────────────────────────────────────
+   Tuned for halation, not for maximum contrast. Near-black behind near-white
+   text made body copy measure 19.1:1, and at that ratio the glyphs bloom and
+   smear for readers with astigmatism, photophobia or migraine — the exact
+   people a dark theme is for. Lifting the page off black and easing the text
+   down lands it near 14:1: still far past WCAG AAA's 7:1, without the glow.
+
+   The old page was oklch(12%), which is 0.2% relative luminance — darker than
+   black-on-OLED guidance anywhere. 18% is 0.58%, in line with the #121212 that
+   Material settled on for the same reason. */
 .dark {
-  --background: oklch(12% 0.02 260);
-  --foreground: oklch(98% 0.01 0);
+  --background: oklch(18% 0.015 260);
+  --foreground: oklch(90% 0.008 250);
 
-  --card: oklch(18% 0.02 260);
-  --card-foreground: oklch(98% 0.01 0);
+  /* Elevation you can actually see: the card used to sit 1.08:1 off the page,
+     which disappears entirely once a reader turns their screen brightness
+     down, and dark themes are usually read at low brightness. */
+  --card: oklch(24% 0.015 260);
+  --card-foreground: oklch(90% 0.008 250);
 
-  --popover: oklch(18% 0.02 260);
-  --popover-foreground: oklch(98% 0.01 0);
+  --popover: oklch(24% 0.015 260);
+  --popover-foreground: oklch(90% 0.008 250);
 
-  --primary: #8ab4f8; /* Google blue (dark-mode tint) */
-  --primary-foreground: oklch(12% 0.02 260);
+  /* Google blue 300 rather than 200. Short-wavelength light drives the retinal
+     pathway behind photophobic pain, so the accent is the one place worth
+     spending luminance carefully; 300 keeps the family and still clears AAA. */
+  --primary: #7baaf7;
+  --primary-foreground: oklch(18% 0.015 260);
 
   --secondary: oklch(25% 0.02 260);
-  --secondary-foreground: oklch(98% 0.01 0);
+  --secondary-foreground: oklch(90% 0.008 250);
 
   --muted: oklch(20% 0.01 260);
   --muted-foreground: oklch(70% 0.02 260);
 
   --accent: oklch(60% 0.13 140);
-  --accent-foreground: oklch(12% 0.02 260);
+  --accent-foreground: oklch(18% 0.015 260);
 
   --destructive: oklch(65% 0.19 25);
-  --destructive-foreground: oklch(12% 0.02 260);
+  --destructive-foreground: oklch(18% 0.015 260);
 
-  --border: oklch(25% 0.02 260);
-  --input: oklch(25% 0.02 260);
-  --ring: #8ab4f8;
+  /* Same split as light mode: quiet separators, findable controls. The old
+     shared value sat at 1.27:1 against the page. */
+  --border: oklch(34% 0.02 260);
+  --input: oklch(50% 0.02 260);
+  --ring: #7baaf7;
 
   --chart-1: oklch(75% 0.18 220);
   --chart-2: oklch(78% 0.16 160);
@@ -174,6 +205,31 @@
   text-transform: uppercase;
   letter-spacing: 0.025em;
   color: color-mix(in oklab, var(--foreground) 60%, transparent);
+}
+
+/* ── Artwork plates ─────────────────────────────────────────────────────────
+   Some artwork carries its own white background and cannot be recolored: an
+   institutional logo, a figure lifted from a paper. In dark mode those become
+   the brightest thing on the page by a wide margin — the HMS plate on /about is
+   a 840x470 field at full luminance sitting on a 0.58% page, which is precisely
+   the flash this theme exists to avoid.
+
+   Dimming with a filter rather than a darker background, because the artwork
+   has to come down with the plate; recoloring only the backdrop leaves the
+   glyphs blazing against a grey surround. `brightness(.82)` takes the plate
+   from 18.9:1 against the page to about 12:1 — still clearly a light panel,
+   no longer a lamp. Untouched in light mode, where a white plate on an
+   off-white page is exactly right. */
+.artwork-plate {
+  background-color: #fff;
+}
+.dark .artwork-plate {
+  filter: brightness(0.82);
+}
+@media (prefers-contrast: more) {
+  .dark .artwork-plate {
+    filter: none;
+  }
 }
 
 /* Hide scrollbar on horizontal chip bars */
