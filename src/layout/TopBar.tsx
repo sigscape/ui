@@ -223,13 +223,20 @@ export function TopBar({
           19.5px on sigscape.org's studio page at 1024px, which is exactly the
           bug this is meant to end. Letting the columns go below their content
           width is what makes them equal at every viewport. Consumers keep the
-          side content narrow enough that the overflow is never reached. */}
+          side content narrow enough that the overflow is never reached.
+
+          Every child names its column. Below `md` the nav is `hidden`, and
+          `display:none` takes it out of the grid altogether rather than leaving
+          an empty track — so with auto-placement the actions slid up into
+          column 2 and the menu button sat stranded mid-bar on every phone.
+          Explicit columns make the layout independent of how many children
+          happen to be rendered. */}
       <div className="mx-auto grid h-14 max-w-6xl grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center px-4 sm:h-16 sm:px-6">
-        <Link href={homeHref} className="flex items-center justify-self-start text-foreground">
+        <Link href={homeHref} className="col-start-1 flex items-center justify-self-start text-foreground">
           {logo}
         </Link>
 
-        <nav className="hidden items-center gap-6 md:flex">
+        <nav className="col-start-2 hidden items-center gap-6 md:flex">
           {nav.map((item) =>
             isDropdown(item) ? (
               <Dropdown key={item.label} item={item} />
@@ -251,7 +258,7 @@ export function TopBar({
           )}
         </nav>
 
-        <div className="flex items-center gap-4 justify-self-end">
+        <div className="col-start-3 flex items-center gap-4 justify-self-end">
           <ThemeToggle />
           {actions}
           {nav.length > 0 && (
