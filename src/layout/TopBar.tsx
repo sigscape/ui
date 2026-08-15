@@ -93,8 +93,12 @@ function Dropdown({
         />
       </button>
 
+      {/* Light carries this panel on its border alone: against warm paper the
+          shadow was a second encoding of the same edge. Dark keeps the shadow,
+          where a border by itself does not read as lifted, and where the theme
+          was settled before this review. */}
       {open && (
-        <div className="absolute left-0 top-full z-50 mt-2 w-96 max-w-[calc(100vw-2rem)] rounded-lg border border-border bg-popover p-2 shadow-lg">
+        <div className="absolute left-0 top-full z-50 mt-2 w-96 max-w-[calc(100vw-2rem)] rounded-lg border border-input bg-popover p-2 dark:border-border dark:shadow-lg">
           {item.children.map((child) => (
             <Link
               key={child.href}

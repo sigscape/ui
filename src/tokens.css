@@ -22,33 +22,35 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ── Light mode ──────────────────────────────────────────────────────────────
-   Left as it was, deliberately. Tinting the page to cut glare was tried at
-   96.4% and 98.2% and both were rejected on looks: with cards this white and
-   this dense — the atlas's signature catalog is almost nothing but white cards
-   — the tint reads as a dingy gutter rather than a softer field. Paper white it
-   is, and the dark theme carries the photophobia case on its own.
+   Warm paper, not blue-white. Two earlier attempts to take the glare off this
+   page darkened it — to 96.4% and then 98.2% — and both were rejected on looks:
+   the tint read as a dingy gutter between panels. The mistake was the hue, not
+   the lightness. Both tries tinted toward blue, and a cool gray reads as dead
+   and unfinished; warmed the same amount, at essentially the same brightness,
+   the page reads as paper. So the lightness comes back up and the chroma moves
+   to a warm hue instead.
 
-   So: page and card share one value, and the border alone tells them apart.
-   Anything that wants elevation here gets it from `--border`, not from a
-   difference in fill. */
+   Cards are pure white, which is what gives them their lift: they are now the
+   brightest surface rather than the same value as the page. It is a slim
+   1.03:1, so `--border` still does most of the separating. */
 :root {
-  --background: oklch(99.8% 0 0);
-  --foreground: oklch(14% 0.02 260);
+  --background: oklch(97.8% 0.008 85);
+  --foreground: oklch(16% 0.015 265);
 
-  --card: oklch(99.8% 0 0);
-  --card-foreground: oklch(14% 0.02 260);
+  --card: oklch(100% 0 0);
+  --card-foreground: oklch(16% 0.015 265);
 
-  --popover: oklch(99.8% 0 0);
-  --popover-foreground: oklch(14% 0.02 260);
+  --popover: oklch(100% 0 0);
+  --popover-foreground: oklch(16% 0.015 265);
 
-  --primary: #1a73e8; /* Google blue 600 */
+  --primary: #1967d2; /* Google blue 700 */
   --primary-foreground: oklch(98% 0.01 0);
 
   --secondary: oklch(78% 0.03 50);
   --secondary-foreground: oklch(20% 0.02 260);
 
   --muted: oklch(96% 0.01 80);
-  --muted-foreground: oklch(50% 0.02 260);
+  --muted-foreground: oklch(50% 0.015 85);
 
   --accent: oklch(50% 0.12 140);
   --accent-foreground: oklch(98% 0.01 0);
@@ -56,9 +58,12 @@
   --destructive: oklch(58% 0.2 25);
   --destructive-foreground: oklch(98% 0.01 0);
 
-  --border: oklch(92% 0.01 240);
-  --input: oklch(92% 0.01 240);
-  --ring: #1a73e8;
+  /* Warmed to match the page; a cool gray edge against warm paper reads as
+     grubby. `--input` is darker than `--border` because it outlines a control
+     rather than decorating a card. */
+  --border: oklch(90% 0.01 85);
+  --input: oklch(84% 0.012 85);
+  --ring: #1967d2;
 
   --radius: 0.625rem;
 
@@ -171,8 +176,40 @@
     @apply border-border;
   }
 
+  /* The split through this file: anything about geometry — size, spacing,
+     leading, density — applies to both themes, because a product does not
+     change shape when you dim the lights. Anything about *color* is light-only,
+     because the dark palette was tuned and measured on its own terms before
+     this review and its appearance is deliberately left as released.
+
+     One step down from the browser default, as a percentage rather than a pixel
+     value: a reader who has set 20px gets 18.75px, so their preference is
+     scaled, never overridden. Tailwind sizes spacing in rem too, so this is a
+     density change and not only a type change — which is the point. It lives
+     here rather than in an app's globals.css so both domains compact together. */
+  html {
+    font-size: 93.75%;
+  }
+
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Prose wants more air than Tailwind's 1.5. Scoped to running text so it
+     cannot loosen labels, table cells or anything inside a control. */
+  p,
+  li {
+    line-height: 1.65;
+  }
+
+  /* Selection in the product's own colors rather than the browser's blue,
+     which collided with the accent and ignored the warm page. It reads as a
+     marker drawn over paper — which is also why it is light-only: a warm wash
+     that bright is the one thing the dark theme exists to avoid, and dark keeps
+     the browser default it shipped with. */
+  html:not(.dark) ::selection {
+    background: oklch(90% 0.09 85);
+    color: oklch(20% 0.02 265);
   }
 }
 
@@ -211,7 +248,7 @@
 
    Dimming with a filter rather than a darker background, because the artwork
    has to come down with the plate; recoloring only the backdrop leaves the
-   glyphs blazing against a grey surround. `brightness(.82)` takes the plate
+   glyphs blazing against a gray surround. `brightness(.82)` takes the plate
    from 18.9:1 against the page to about 12:1 — still clearly a light panel,
    no longer a lamp. Untouched in light mode, where a white plate on an
    off-white page is exactly right. */
@@ -225,6 +262,22 @@
   .dark .artwork-plate {
     filter: none;
   }
+}
+
+/* Scrollbars in the product's palette rather than the OS's. The studio has
+   several inner scroll areas — the record list, the tab strip, artifact panels
+   — and native bars were the last surface still wearing system chrome. `thin`
+   plus a tinted thumb keeps them present without the heavy default track. */
+/* Width is geometry, so both themes get the narrow bar. The tint is color, so
+   only light sets one — dark keeps the native thumb, which next-themes already
+   renders dark via the `color-scheme` it puts on <html>. */
+* {
+  scrollbar-width: thin;
+}
+html:not(.dark),
+html:not(.dark) * {
+  scrollbar-color: color-mix(in oklab, var(--muted-foreground) 35%, transparent)
+    transparent;
 }
 
 /* Hide scrollbar on horizontal chip bars */
