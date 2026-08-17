@@ -86,7 +86,7 @@ export function Tooltip({ content, children, className }: { content: React.React
             className={cn(
               // Same popover vocabulary as the dropdown: border-defined in light,
               // shadow-lifted in dark. See TopBar for the reasoning.
-              "pointer-events-none z-[120] block max-h-[60vh] w-max min-w-48 max-w-sm overflow-y-auto rounded-lg border border-input bg-popover p-3 text-xs font-normal normal-case leading-relaxed tracking-normal text-foreground dark:border-border dark:shadow-lg",
+              "pointer-events-none z-[120] block max-h-[60vh] w-max min-w-48 max-w-sm overflow-y-auto rounded-lg border border-border bg-popover p-3 text-xs font-normal normal-case leading-relaxed tracking-normal text-foreground dark:shadow-lg",
               "[&_p:first-child]:mt-0 [&_p]:mt-2",
               "[&_ul]:mt-1.5 [&_ul]:list-disc [&_ul]:space-y-1 [&_ul]:pl-4 [&_li]:marker:text-foreground/40",
               "[&_strong]:font-semibold [&_strong]:text-foreground",

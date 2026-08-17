@@ -49,6 +49,11 @@ export {
 } from "./components/SigLoader";
 export { Tags } from "./components/Tag";
 
+export {
+  SectionIndex,
+  useActiveSection,
+  type SectionIndexItem,
+} from "./components/SectionIndex";
 export { ThemeProvider, themeScript } from "./theme/ThemeProvider";
 export { ThemeToggle } from "./theme/ThemeToggle";
 

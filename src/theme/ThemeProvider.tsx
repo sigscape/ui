@@ -36,15 +36,39 @@ const ONE_YEAR = 60 * 60 * 24 * 365;
  */
 export const themeScript = `(function(){try{var m=document.cookie.match(/(?:^|;\\s*)${COOKIE_KEY}=([^;]*)/);if(!m)return;var v=decodeURIComponent(m[1]);if(v!=='light'&&v!=='dark'&&v!=='system')return;localStorage.setItem('${STORAGE_KEY}',v);}catch(e){}})();`;
 
-/** Mirrors every theme change back out to the shared cookie. */
+function readThemeCookie(): string | null {
+  const m = document.cookie.match(
+    new RegExp(`(?:^|;\\s*)${COOKIE_KEY}=([^;]*)`),
+  );
+  if (!m) return null;
+  const v = decodeURIComponent(m[1]);
+  return v === "light" || v === "dark" || v === "system" ? v : null;
+}
+
+/**
+ * Keeps the shared cookie and this tab's theme in step, in both directions.
+ *
+ * Writing is the easy half. Reading is why this polls: a cookie fires no event
+ * when it changes, and the two sites are separate origins, so neither the
+ * `storage` event nor `BroadcastChannel` reaches across them — both are
+ * origin-scoped. next-themes already syncs tabs of the *same* origin through
+ * `storage`; this is the only mechanism left for sigscape.org and
+ * mutopia.sigscape.org open side by side.
+ *
+ * The poll runs a string match once a second and only while the tab is visible,
+ * so a backgrounded tab costs nothing, and `focus` and `visibilitychange` make
+ * the common case — switching to the other tab — update immediately rather than
+ * up to a second later.
+ */
 function ThemeCookieBridge() {
-  const { theme } = useTheme();
+  const { theme, setTheme } = useTheme();
 
   React.useEffect(() => {
     if (!theme) return;
     // Scope to the registrable domain so the sibling subdomain can read it. On
     // localhost and on Vercel preview URLs there is no shared parent to speak
-    // of, so the cookie stays host-only and the sync is simply a no-op there.
+    // of, so the cookie stays host-only — which still works between ports,
+    // since cookies ignore them.
     const host = window.location.hostname;
     const shared =
       host === "sigscape.org" || host.endsWith(".sigscape.org")
@@ -53,6 +77,27 @@ function ThemeCookieBridge() {
     const secure = window.location.protocol === "https:" ? "; secure" : "";
     document.cookie = `${COOKIE_KEY}=${encodeURIComponent(theme)}; path=/; max-age=${ONE_YEAR}; samesite=lax${shared}${secure}`;
   }, [theme]);
+
+  React.useEffect(() => {
+    // `theme` is the user's choice, including "system", which is what the
+    // cookie carries — comparing against it rather than the resolved value is
+    // what stops this and the writer above from trading updates forever.
+    const sync = () => {
+      const shared = readThemeCookie();
+      if (shared && shared !== theme) setTheme(shared);
+    };
+    const onVisible = () => {
+      if (!document.hidden) sync();
+    };
+    const id = window.setInterval(onVisible, 1000);
+    window.addEventListener("focus", sync);
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      window.clearInterval(id);
+      window.removeEventListener("focus", sync);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }, [theme, setTheme]);
 
   return null;
 }

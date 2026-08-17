@@ -22,19 +22,34 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ── Light mode ──────────────────────────────────────────────────────────────
-   Warm paper, not blue-white. Two earlier attempts to take the glare off this
-   page darkened it — to 96.4% and then 98.2% — and both were rejected on looks:
-   the tint read as a dingy gutter between panels. The mistake was the hue, not
-   the lightness. Both tries tinted toward blue, and a cool gray reads as dead
-   and unfinished; warmed the same amount, at essentially the same brightness,
-   the page reads as paper. So the lightness comes back up and the chroma moves
-   to a warm hue instead.
+   A white card on a near-white neutral page, separated by a light border. This
+   is deliberately the conventional answer, arrived at after a long detour
+   through tinted pages, warm papers and cream cards, none of which survived
+   contact with the product.
 
-   Cards are pure white, which is what gives them their lift: they are now the
-   brightest surface rather than the same value as the page. It is a slim
-   1.03:1, so `--border` still does most of the separating. */
+   The numbers come from what shipped light themes actually do. Card against
+   page, measured:
+
+     GitHub  #f6f8fa  1.065      Stripe  #f6f9fc  1.057
+     Vercel  #fafafa  1.044      Linear  #f9f9fb  1.052
+
+   All of them sit between 1.04 and 1.07 with a pure white card. Earlier
+   attempts here ran at 1.12 and 1.15, which is why panels read as hard-edged
+   slabs; the page at 1.05 is the middle of that range.
+
+   The page is chroma 0 on purpose. Both apps host data whose palettes span the
+   whole hue circle — the atlas's topotypes include coral, orange, yellow, green,
+   cyan, blue and violet — and a ground carrying any hue competes with hues the
+   charts use to encode meaning. A tinted page also fights every surface that is
+   transparent by design, of which there are many. Neutral is the only ground
+   that does neither. Brand color belongs in the mark and the accent, not the
+   paper.
+
+   `--border` sits 1.40:1 off the card, which is the distance the dark theme
+   uses, so an edge carries the same weight in both. `--input` keeps 3:1 against
+   the card because it outlines a control (WCAG 1.4.11). */
 :root {
-  --background: oklch(97.8% 0.008 85);
+  --background: oklch(98.3% 0 0);
   --foreground: oklch(16% 0.015 265);
 
   --card: oklch(100% 0 0);
@@ -50,7 +65,7 @@
   --secondary-foreground: oklch(20% 0.02 260);
 
   --muted: oklch(96% 0.01 80);
-  --muted-foreground: oklch(50% 0.015 85);
+  --muted-foreground: oklch(51.6% 0 0);
 
   --accent: oklch(50% 0.12 140);
   --accent-foreground: oklch(98% 0.01 0);
@@ -58,11 +73,17 @@
   --destructive: oklch(58% 0.2 25);
   --destructive-foreground: oklch(98% 0.01 0);
 
-  /* Warmed to match the page; a cool gray edge against warm paper reads as
-     grubby. `--input` is darker than `--border` because it outlines a control
-     rather than decorating a card. */
-  --border: oklch(90% 0.01 85);
-  --input: oklch(84% 0.012 85);
+  /* Measured against the CARD, not the page — that is what a border actually
+     outlines. In dark the page, card and border all step the same way
+     (18% -> 24% -> 34%), so the edge lands only 1.40:1 from the card it draws.
+     Taking the mirror against the page instead put the light border on the far
+     side of the card and 1.83:1 away from it, a third harder than dark, and put
+     `--input` at 3.58:1, which is why dropdown edges read as drawn on with a
+     pen. Matching dark's card-relative distance instead: 1.40:1 for a
+     decorative edge, and 3.00:1 for `--input`, which outlines a control and so
+     owes WCAG 1.4.11 its 3:1 against the surface it sits on. */
+  --border: oklch(88.8% 0 0);
+  --input: oklch(66.9% 0 0);
   --ring: #1967d2;
 
   --radius: 0.625rem;
@@ -76,6 +97,13 @@
   /* SigScape brand accents (MuTopia navy / cyan) */
   --brand-navy: #262262;
   --brand-cyan: #72d0f6;
+
+  /* The coral from the sigscape mark, exactly as the favicon draws it. It is
+     the one place brand color is allowed to carry state: the page index marks
+     where you are with it, so "you are here" reads as the product's own color
+     rather than as another blue link. `--primary` stays blue and stays the
+     accent for anything interactive. */
+  --brand-coral: #ef6a3c;
 }
 
 /* ── Dark mode ───────────────────────────────────────────────────────────────
@@ -133,6 +161,12 @@
 
   --brand-navy: #262262;
   --brand-cyan: #72d0f6;
+
+  /* Lifted off the mark's own value: #ef6a3c against this page is a heavy,
+     saturated block, and the dark theme spends saturation carefully. Same hue,
+     more lightness, less chroma — 7.2:1 against the page where light sits at
+     2.9:1, because a dark page needs more separation to read as an edge. */
+  --brand-coral: oklch(72% 0.15 39);
 }
 
 @theme inline {
@@ -165,6 +199,7 @@
   --color-chart-5: var(--chart-5);
   --color-brand-navy: var(--brand-navy);
   --color-brand-cyan: var(--brand-cyan);
+  --color-brand-coral: var(--brand-coral);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -202,14 +237,23 @@
     line-height: 1.65;
   }
 
-  /* Selection in the product's own colors rather than the browser's blue,
-     which collided with the accent and ignored the warm page. It reads as a
-     marker drawn over paper — which is also why it is light-only: a warm wash
-     that bright is the one thing the dark theme exists to avoid, and dark keeps
-     the browser default it shipped with. */
-  html:not(.dark) ::selection {
-    background: oklch(90% 0.09 85);
-    color: oklch(20% 0.02 265);
+  /* Selection in the mark's coral. The browser default collided with the blue
+     accent, which the product uses for links and for the page index — selected
+     text and a link looked like the same kind of thing. Coral is the one color
+     that belongs to sigscape and to nothing else in the interface, so a
+     selection cannot be mistaken for a control.
+
+     Both themes, one rule: `--brand-coral` carries a value per theme, and the
+     mix is heavier in dark because the same alpha over a dark page barely
+     registers. Text stays at full `--foreground` so a selected line never
+     loses contrast. */
+  ::selection {
+    background: color-mix(in oklab, var(--brand-coral) 30%, transparent);
+    color: var(--foreground);
+  }
+  .dark ::selection {
+    background: color-mix(in oklab, var(--brand-coral) 42%, transparent);
+    color: var(--foreground);
   }
 }
 
