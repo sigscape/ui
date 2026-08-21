@@ -35,11 +35,22 @@ export function BottomBar({
   actions?: React.ReactNode;
   compact?: boolean;
 }) {
+  // One column for the wordmark plus one per section. Held at four for three
+  // sections or fewer, which is what every consumer shipped before a fourth
+  // group existed — widening unconditionally would re-flow mutopia's two-section
+  // footer for nothing. Both class names are spelled out rather than built from
+  // a count, because Tailwind scans source text and never sees a computed one.
+  const wide = sections.length >= 4;
+  const gridCols = wide ? "lg:grid-cols-5" : "lg:grid-cols-4";
+  const actionsCol = wide ? "lg:col-start-5" : "lg:col-start-4";
+
   return (
     <footer className="border-t border-border bg-card">
-      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+      {/* Matched to TopBar's 7xl so the wordmark at the foot of the page sits
+          on the same left edge as the one at the head of it. */}
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
         {!compact && (
-          <div className="grid grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-4">
+          <div className={`grid grid-cols-2 gap-x-8 gap-y-10 ${gridCols}`}>
             <div className="col-span-2 lg:col-span-1">
               <Link
                 href={homeHref}
@@ -88,7 +99,9 @@ export function BottomBar({
             ))}
 
             {actions && (
-              <div className="flex items-start justify-center sm:justify-end lg:col-start-4">
+              <div
+                className={`flex items-start justify-center sm:justify-end ${actionsCol}`}
+              >
                 {actions}
               </div>
             )}

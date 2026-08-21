@@ -235,7 +235,14 @@ export function TopBar({
           column 2 and the menu button sat stranded mid-bar on every phone.
           Explicit columns make the layout independent of how many children
           happen to be rendered. */}
-      <div className="mx-auto grid h-14 max-w-6xl grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center px-4 sm:h-16 sm:px-6">
+      {/* Wider than the 6xl content column on purpose. The side tracks are
+          equal by construction, so the room between the nav and the actions is
+          whatever is left after the widest side — and on sigscape.org's studio
+          page that side carries a pill reading "sigscape studio · runs in your
+          browser ·?", which left About almost touching it at 6xl. 7xl buys
+          128px, half of it on each side. It also sits closer to the studio's
+          own 112rem shell, which the bar overhangs on that page either way. */}
+      <div className="mx-auto grid h-14 max-w-7xl grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center px-4 sm:h-16 sm:px-6">
         <Link href={homeHref} className="col-start-1 flex items-center justify-self-start text-foreground">
           {logo}
         </Link>
