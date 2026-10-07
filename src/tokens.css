@@ -37,19 +37,33 @@
    attempts here ran at 1.12 and 1.15, which is why panels read as hard-edged
    slabs; the page at 1.05 is the middle of that range.
 
-   The page is chroma 0 on purpose. Both apps host data whose palettes span the
-   whole hue circle — the atlas's topotypes include coral, orange, yellow, green,
-   cyan, blue and violet — and a ground carrying any hue competes with hues the
-   charts use to encode meaning. A tinted page also fights every surface that is
-   transparent by design, of which there are many. Neutral is the only ground
-   that does neither. Brand color belongs in the mark and the accent, not the
-   paper.
+   The neutrals carry a trace of violet — hue 286, chroma 0.0015 to 0.005 — and
+   both halves of that were arrived at by elimination.
+
+   Chroma 0 is not neutral in use. Next to a blue-black foreground and a blue
+   accent, an achromatic grey reads warm; "yellowish grey" is what people call a
+   palette whose chroma is literally zero. Vercel and Carbon sit at chroma 0 and
+   both read as paper.
+
+   The usual fix, a slate cast at hue ~248, is what GitHub (0.0034), Stripe
+   (0.0051) and Tailwind slate (0.0034) use — but in sRGB that lifts the green
+   channel above red: GitHub's #f6f8fa is rgb(246,248,250), and at page
+   lightness that extra green reads as a cyan-green film. Hue 286 is Tailwind
+   zinc's direction, where red and green stay equal and only blue lifts —
+   #f9f9fa is rgb(249,249,250). No yellow, no green, no visible color at all:
+   just a grey that stops fighting the text.
+
+   The amount is the point. A 0.0015 trace at 98% lightness is a cast, not a
+   color, so it cannot compete with data — both apps host palettes spanning the
+   whole hue circle, including coral, orange, cyan and violet. The card stays
+   pure white, which is what makes the surround read as clean rather than
+   tinted: white content, quiet chrome.
 
    `--border` sits 1.40:1 off the card, which is the distance the dark theme
    uses, so an edge carries the same weight in both. `--input` keeps 3:1 against
    the card because it outlines a control (WCAG 1.4.11). */
 :root {
-  --background: oklch(98.3% 0 0);
+  --background: oklch(98.3% 0.0015 286);
   /* 18.1:1 on the card, which is Carbon's text-primary exactly, and within a
      point of Material's on-surface (17.1) and Tailwind slate-900 (17.9). The
      old 16% measured 19.4:1 — above every shipped system, and the top of the
@@ -71,7 +85,7 @@
      structure without another hairline: 1.10:1 off the card and 1.05:1 off the
      page, which separates a strip from the canvas it borders while staying far
      below the step that makes panels read as slabs. */
-  --layer: oklch(96.8% 0 0);
+  --layer: oklch(96.8% 0.0025 286);
 
   --primary: #1967d2; /* Google blue 700 */
   --primary-foreground: oklch(98% 0.01 0);
@@ -82,13 +96,15 @@
      `Button` paints on hover — so a hover turned a button green with white text,
      in a product whose accent is blue. All three now resolve to the neutral
      layer, which is what a subtle surface means here. */
-  --secondary: oklch(96.8% 0 0);
+  --secondary: oklch(96.8% 0.0025 286);
   --secondary-foreground: oklch(20% 0.015 265);
 
-  --muted: oklch(96.8% 0 0);
-  --muted-foreground: oklch(51.6% 0 0);
+  --muted: oklch(96.8% 0.0025 286);
+  /* Carries the cast too: `bg-muted-foreground/12` is the product's standard
+     pill tint, so a warm grey here warms every control on the page. */
+  --muted-foreground: oklch(51.6% 0.004 286);
 
-  --accent: oklch(96.8% 0 0);
+  --accent: oklch(96.8% 0.0025 286);
   --accent-foreground: oklch(20% 0.015 265);
 
   /* 5.15:1 on the card and 4.70:1 on the layer, so destructive text clears
@@ -106,14 +122,14 @@
      pen. Matching dark's card-relative distance instead: 1.40:1 for a
      decorative edge, and 3.00:1 for `--input`, which outlines a control and so
      owes WCAG 1.4.11 its 3:1 against the surface it sits on. */
-  --border: oklch(88.8% 0 0);
+  --border: oklch(88.8% 0.005 286);
   /* WCAG 1.4.11 asks 3:1 of a component boundary against *its* surface, and a
      control does not only sit on the card: the studio puts selects and search
      boxes on the page and on chrome strips too. The old 66.9% held 3.00:1
      against the card but fell to 2.86:1 on the page, so the same field was
      compliant in a panel and non-compliant beside it. 64.5% clears 3:1 on all
      three surfaces — card 3.30, page 3.14, layer 3.01. */
-  --input: oklch(64.5% 0 0);
+  --input: oklch(64.5% 0.005 286);
   --ring: #1967d2;
 
   --radius: 0.625rem;
