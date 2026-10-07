@@ -50,27 +50,51 @@
    the card because it outlines a control (WCAG 1.4.11). */
 :root {
   --background: oklch(98.3% 0 0);
-  --foreground: oklch(16% 0.015 265);
+  /* 18.1:1 on the card, which is Carbon's text-primary exactly, and within a
+     point of Material's on-surface (17.1) and Tailwind slate-900 (17.9). The
+     old 16% measured 19.4:1 — above every shipped system, and the top of the
+     range is where dark-on-light starts to read as glare rather than as ink.
+     It is not pushed further because the micro-label ladder is opacity-based:
+     at 20% lightness `/60` still measures 4.74:1, and anything lighter drops
+     the smallest labels under 4.5:1. */
+  --foreground: oklch(20% 0.015 265);
 
   --card: oklch(100% 0 0);
-  --card-foreground: oklch(16% 0.015 265);
+  --card-foreground: oklch(20% 0.015 265);
 
   --popover: oklch(100% 0 0);
-  --popover-foreground: oklch(16% 0.015 265);
+  --popover-foreground: oklch(20% 0.015 265);
+
+  /* Chrome, not content: toolbars, rails and header strips — the surfaces that
+     frame the work rather than hold it. Carbon's layering model alternates
+     white and gray-10 for exactly this, and this is gray-10 (#f4f4f4). It buys
+     structure without another hairline: 1.10:1 off the card and 1.05:1 off the
+     page, which separates a strip from the canvas it borders while staying far
+     below the step that makes panels read as slabs. */
+  --layer: oklch(96.8% 0 0);
 
   --primary: #1967d2; /* Google blue 700 */
   --primary-foreground: oklch(98% 0.01 0);
 
-  --secondary: oklch(78% 0.03 50);
-  --secondary-foreground: oklch(20% 0.02 260);
+  /* `--secondary`, `--muted` and `--accent` are shadcn's surface roles, not a
+     second and third brand color. They arrived with the template carrying a tan
+     and a saturated green, and `--accent` is what every outline and ghost
+     `Button` paints on hover — so a hover turned a button green with white text,
+     in a product whose accent is blue. All three now resolve to the neutral
+     layer, which is what a subtle surface means here. */
+  --secondary: oklch(96.8% 0 0);
+  --secondary-foreground: oklch(20% 0.015 265);
 
-  --muted: oklch(96% 0.01 80);
+  --muted: oklch(96.8% 0 0);
   --muted-foreground: oklch(51.6% 0 0);
 
-  --accent: oklch(50% 0.12 140);
-  --accent-foreground: oklch(98% 0.01 0);
+  --accent: oklch(96.8% 0 0);
+  --accent-foreground: oklch(20% 0.015 265);
 
-  --destructive: oklch(58% 0.2 25);
+  /* 5.15:1 on the card and 4.70:1 on the layer, so destructive text clears
+     4.5:1 wherever it lands; white on it measures 4.85:1, which the old 58%
+     did not manage (4.46:1 — a destructive button's own label failed). */
+  --destructive: oklch(56% 0.2 25);
   --destructive-foreground: oklch(98% 0.01 0);
 
   /* Measured against the CARD, not the page — that is what a border actually
@@ -83,7 +107,13 @@
      decorative edge, and 3.00:1 for `--input`, which outlines a control and so
      owes WCAG 1.4.11 its 3:1 against the surface it sits on. */
   --border: oklch(88.8% 0 0);
-  --input: oklch(66.9% 0 0);
+  /* WCAG 1.4.11 asks 3:1 of a component boundary against *its* surface, and a
+     control does not only sit on the card: the studio puts selects and search
+     boxes on the page and on chrome strips too. The old 66.9% held 3.00:1
+     against the card but fell to 2.86:1 on the page, so the same field was
+     compliant in a panel and non-compliant beside it. 64.5% clears 3:1 on all
+     three surfaces — card 3.30, page 3.14, layer 3.01. */
+  --input: oklch(64.5% 0 0);
   --ring: #1967d2;
 
   --radius: 0.625rem;
@@ -149,6 +179,10 @@
 
   /* Same split as light mode: quiet separators, findable controls. The old
      shared value sat at 1.27:1 against the page. */
+  /* Light's chrome layer, mirrored so `bg-layer` resolves in both themes. It
+     sits between the page and the card, where a dark strip belongs. */
+  --layer: oklch(21% 0.015 260);
+
   --border: oklch(34% 0.02 260);
   --input: oklch(50% 0.02 260);
   --ring: #7baaf7;
@@ -176,6 +210,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
+  --color-layer: var(--layer);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
