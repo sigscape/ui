@@ -348,26 +348,23 @@
    no longer a lamp. Untouched in light mode, where a white plate on an
    off-white page is exactly right. */
 /* A floating surface over content: menus, tooltips, the command palette,
-   chart popovers. The same treatment as the top bar, so every layer that
-   hovers over the work reads as one material: near-solid where backdrop
-   filters are missing, translucent and blurred where they exist. Dialogs
-   keep the opaque popover token; a modal sits on a dimmed page, not on the
-   work. */
+   chart popovers. Exactly the top bar's recipe (`bg-background/95
+   backdrop-blur supports-[backdrop-filter]:bg-background/60`), written out so
+   consumers can apply it as one class: same token, same blur, and the same
+   oklab mix Tailwind's opacity modifier emits, one step denser (80%, not 60%)
+   because a popup sits over data, where a header sits over margin. Not oklch:
+   mixing with `transparent` in a polar space goes through an undefined hue,
+   which WebKit renders as orange. Dialogs keep the opaque popover token; a
+   modal sits on a dimmed page, not on the work. */
 .popover-glass {
-  background-color: color-mix(in oklch, var(--popover) 95%, transparent);
+  background-color: color-mix(in oklab, var(--background) 95%, transparent);
 }
 /* One declaration, unprefixed: the bundler (Lightning CSS) adds the -webkit-
    alias itself, and dropped the whole declaration when both were written. */
 @supports (backdrop-filter: blur(0)) {
   .popover-glass {
-    background-color: color-mix(in oklch, var(--popover) 78%, transparent);
-    backdrop-filter: blur(12px);
-  }
-  /* Dark bleeds more: light text behind light text blooms through a thin
-     layer, so the dark panel is denser. Same blur, so it is still one
-     material. */
-  .dark .popover-glass {
-    background-color: color-mix(in oklch, var(--popover) 88%, transparent);
+    background-color: color-mix(in oklab, var(--background) 80%, transparent);
+    backdrop-filter: blur(8px);
   }
 }
 
