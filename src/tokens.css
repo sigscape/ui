@@ -347,6 +347,29 @@
    from 18.9:1 against the page to about 12:1 — still clearly a light panel,
    no longer a lamp. Untouched in light mode, where a white plate on an
    off-white page is exactly right. */
+/* A floating surface over content: menus, tooltips, the command palette,
+   chart popovers. The same treatment as the top bar, so every layer that
+   hovers over the work reads as one material: near-solid where backdrop
+   filters are missing, translucent and blurred where they exist. Dialogs
+   keep the opaque popover token; a modal sits on a dimmed page, not on the
+   work. */
+.popover-glass {
+  background-color: color-mix(in oklch, var(--popover) 95%, transparent);
+}
+@supports (backdrop-filter: blur(0)) {
+  .popover-glass {
+    background-color: color-mix(in oklch, var(--popover) 78%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  /* Dark bleeds more: light text behind light text blooms through a thin
+     layer, so the dark panel is denser. Same blur, so it is still one
+     material. */
+  .dark .popover-glass {
+    background-color: color-mix(in oklch, var(--popover) 88%, transparent);
+  }
+}
+
 .artwork-plate {
   background-color: #fff;
 }
