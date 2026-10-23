@@ -356,11 +356,12 @@
 .popover-glass {
   background-color: color-mix(in oklch, var(--popover) 95%, transparent);
 }
+/* One declaration, unprefixed: the bundler (Lightning CSS) adds the -webkit-
+   alias itself, and dropped the whole declaration when both were written. */
 @supports (backdrop-filter: blur(0)) {
   .popover-glass {
     background-color: color-mix(in oklch, var(--popover) 78%, transparent);
     backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
   }
   /* Dark bleeds more: light text behind light text blooms through a thin
      layer, so the dark panel is denser. Same blur, so it is still one
